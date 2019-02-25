@@ -1,0 +1,57 @@
+spring:
+  application:
+    name: reservation-manager
+  datasource:
+    url: jdbc:postgresql://db:5432/reservations
+    username: reservations
+    password: reservations
+    validationQuery: SELECT 1
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    open-in-view: false
+    show-sql: false
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+      generate-ddl: true
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: false
+        jdbc:
+          lob:
+            non_contextual_creation: true
+
+    cache:
+      type: redis
+
+    redis:
+      host: redis
+      port: 6379
+      time-to-live: 60000 # 1 min
+
+    lettuce:
+      pool :
+        max-active: 7
+        max-idle: 7
+        min-idle: 2
+        max-wait: -1ms
+        shutdown-timeout: 200ms
+
+server:
+  port: 8080
+
+logging:
+  level:
+    org:
+      springframework:
+        boot: INFO
+
+
+---
+spring:
+  profiles: test
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+      generate-ddl: false

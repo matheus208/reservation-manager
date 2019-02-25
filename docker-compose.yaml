@@ -1,0 +1,31 @@
+version: '2'
+services:
+  web:
+    build: .
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+      - redis
+  db:
+    container_name: reservations_db
+    image: postgres:9.5
+    volumes:
+      - reservations_db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=reservations
+      - POSTGRES_PASSWORD=reservations
+      - POSTGRES_DB=reservations
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    ports:
+      - 5432:5432
+  redis:
+    container_name: reservations_redis
+    image: redis
+    expose:
+      - 6379
+
+volumes:
+    reservations_db: {}
+
+
